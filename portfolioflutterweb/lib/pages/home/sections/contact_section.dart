@@ -6,8 +6,9 @@ class ContactSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 40),
-      color: Colors.black.withOpacity(0.03),
+      color: Colors.black.withValues(),
       child: Column(
         children: [
           const Text(

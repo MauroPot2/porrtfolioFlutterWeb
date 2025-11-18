@@ -74,7 +74,7 @@ class _ProjectCardState extends State<_ProjectCard> {
               child: const Text(
                 "→ Scopri di più",
                 style: TextStyle(
-                  color: Colors.blueAccent,
+                  color: Color.fromARGB(255, 255, 5, 230),
                   fontWeight: FontWeight.bold,
                 ),
               ),

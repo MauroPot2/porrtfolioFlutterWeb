@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolioflutterweb/widgets/footer.dart';
 import '../../widgets/navbar.dart';
 import 'sections/hero_section.dart';
 import 'sections/skills_section.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatelessWidget {
             SkillsSection(),
             ProjectsSection(),
             ContactSection(),
+            Footer(),
           ],
         ),
       ),

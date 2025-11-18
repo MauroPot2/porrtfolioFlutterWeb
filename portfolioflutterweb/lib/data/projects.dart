@@ -9,11 +9,11 @@ List<Project> myProjects = [
   Project(
     title: "Fantagrimaldi.it",
     description: "Sito dedicato al fantacalcio con statistiche, articoli e caricature personalizzate.",
-    link: "https://www.fantagrimaldi.it",
+    link: "https://github.com/MauroPot2/fantanews-web-app",
   ),
   Project(
     title: "Portfolio Flutter",
     description: "Il progetto che stai guardando!",
-    link: "#",
+    link: "https://github.com/MauroPot2/porrtfolioFlutterWeb",
   ),
 ];
