@@ -22,8 +22,6 @@ class SkillsSection extends StatelessWidget {
               _SkillCard("Flutter / Dart"),
               _SkillCard("Python / Flask"),
               _SkillCard("HTML / CSS"),
-              _SkillCard("UI Design"),
-              _SkillCard("Firebase"),
               _SkillCard("SQL / Rest API"),
               _SkillCard("Linux / DevOps Basics"),
             ],

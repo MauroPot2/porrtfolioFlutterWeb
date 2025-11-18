@@ -22,7 +22,9 @@ class ContactSection extends StatelessWidget {
             onPressed: () {},
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-              child: Text("Scrivimi"),
+              child: Text("Scrivimi",
+              style: TextStyle(color: Colors.purpleAccent),
+              ),
             ),
           )
         ],
