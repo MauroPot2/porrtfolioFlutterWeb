@@ -17,8 +17,10 @@ class ProjectsHeroSection extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            "Una raccolta dei miei progetti più importanti.\n"
-            "Flutter · Python · Full Stack · Web.",
+            "I miei progetti raccontano il mio percorso: studio, pratica e passione per il digitale.\n"
+            "Lavoro soprattutto con Flutter, Python e tecnologie Full Stack.\n"
+            "Attualmente sto seguendo un corso in Project Management con Google\n"
+            "che mi permette di capire in che modo gestire tempi e ritmi del mio lavoro!", 
             style: TextStyle(fontSize: 20),
           ),
         ],

@@ -43,13 +43,16 @@ class _ProjectCardState extends State<ProjectCard> {
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
             const SizedBox(height: 12),
 
             Text(
               project.description,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16,
+              color: Colors.black54),
+
             ),
 
             const SizedBox(height: 20),
@@ -72,7 +75,7 @@ class _ProjectCardState extends State<ProjectCard> {
                     ),
                   ),
                   SizedBox(width: 6),
-                  Icon(Icons.open_in_new, size: 18, color: Colors.blueAccent),
+                  Icon(Icons.open_in_new, size: 18, color: Color.fromARGB(255, 255, 64, 226)),
                 ],
               ),
             ),
