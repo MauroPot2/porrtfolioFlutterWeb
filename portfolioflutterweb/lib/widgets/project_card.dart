@@ -71,11 +71,11 @@ class _ProjectCardState extends State<ProjectCard> {
                     "Scopri di più",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 255, 0, 230),
+                      color: Color(0xFFFF05E6),
                     ),
                   ),
                   SizedBox(width: 6),
-                  Icon(Icons.open_in_new, size: 18, color: Color.fromARGB(255, 255, 64, 226)),
+                  Icon(Icons.open_in_new, size: 18, color: Color(0xFFFF05E6)),
                 ],
               ),
             ),
