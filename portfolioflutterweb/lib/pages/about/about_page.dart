@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolioflutterweb/pages/about/sections/about_section.dart';
 import 'package:portfolioflutterweb/pages/home/sections/contact_section.dart';
 import 'package:portfolioflutterweb/widgets/footer.dart';
 import 'package:portfolioflutterweb/widgets/navbar.dart';
@@ -11,8 +12,9 @@ class AboutPage extends StatelessWidget {
    return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: const [
+          children: [
             Navbar(),
+            AboutSection(),
             ContactSection(),
             Footer(),
           ],

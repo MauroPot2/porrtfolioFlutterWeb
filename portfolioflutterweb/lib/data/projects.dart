@@ -7,8 +7,8 @@ List<Project> myProjects = [
     link: "https://github.com/MauroPot2/cicloversoWebApp",
   ),
   Project(
-    title: "Fantagrimaldi.it",
-    description: "Sito dedicato al fantacalcio con statistiche, articoli e caricature personalizzate.",
+    title: "Fanta news.",
+    description: "Carica i CSV delle tue leghe di fantacalcio e lascia che l’AI trasformi i tuoi dati in articoli sportivi avvincenti, pensati per rendere ogni giornata ancora più emozionante.",
     link: "https://github.com/MauroPot2/fantanews-web-app",
   ),
   Project(
