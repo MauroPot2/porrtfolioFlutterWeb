@@ -8,22 +8,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Set up Flutter
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Enter Flutter project directory
+        working-directory: ./portfolioflutterweb
+        run: echo "Entered Flutter project directory"
+
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      - name: Get dependencies
+      - name: Install dependencies
+        working-directory: ./portfolioflutterweb
         run: flutter pub get
 
       - name: Build Flutter Web
+        working-directory: ./portfolioflutterweb
         run: flutter build web --release
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/web
+          publish_dir: ./portfolioflutterweb/build/web
