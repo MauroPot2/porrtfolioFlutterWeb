@@ -17,7 +17,7 @@ class ProjectsSection extends StatelessWidget {
           Wrap(
             spacing: 24,
             runSpacing: 24,
-            children: myProjects.map((p) => _ProjectCard(p)).toList(),
+            children: myProjects.map((p) => ProjectCard(p)).toList(),
           )
         ],
       ),
@@ -25,57 +25,86 @@ class ProjectsSection extends StatelessWidget {
   }
 }
 
-class _ProjectCard extends StatefulWidget {
+class ProjectCard extends StatefulWidget {
   final dynamic project;
-  const _ProjectCard(this.project);
+  const ProjectCard(this.project, {super.key});
 
   @override
-  State<_ProjectCard> createState() => _ProjectCardState();
+  State<ProjectCard> createState() => _ProjectCardState();
 }
 
-class _ProjectCardState extends State<_ProjectCard> {
+class _ProjectCardState extends State<ProjectCard> {
   bool hovering = false;
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final isDark = cs.brightness == Brightness.dark;
+
+    //  Background con luminosità regolata tramite VALUES (nuovo Flutter)
+    final Color cardColor = cs.surface.withValues(
+      alpha: isDark ? 0.35 : 0.97,
+    );
+
+    //  Ombra dinamica con withValues()
+    final Color shadowColor = isDark
+        ? Colors.black.withValues(alpha: 0.35)
+        : Colors.grey.withValues(alpha: 0.25);
+
     return MouseRegion(
       onEnter: (_) => setState(() => hovering = true),
       onExit: (_) => setState(() => hovering = false),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
         width: 340,
         padding: const EdgeInsets.all(22),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: const Color.fromARGB(255, 0, 0, 0),
+          color: cardColor,
           boxShadow: [
             BoxShadow(
-              blurRadius: hovering ? 20 : 10,
-              color: Colors.black12,
+              blurRadius: hovering ? 18 : 10,
               spreadRadius: hovering ? 2 : 1,
-            )
+              color: shadowColor,
+            ),
           ],
         ),
+
+        // Contenuto della card
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               widget.project.title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: cs.onSurface,
               ),
             ),
+
             const SizedBox(height: 10),
-            Text(widget.project.description),
+
+            Text(
+              widget.project.description,
+              style: TextStyle(
+                fontSize: 15,
+                height: 1.4,
+                color: cs.onSurface.withValues(alpha: 0.85),
+              ),
+            ),
+
             const SizedBox(height: 14),
+
             InkWell(
+              borderRadius: BorderRadius.circular(6),
               onTap: () {},
-              child: const Text(
+              child: Text(
                 "→ Scopri di più",
                 style: TextStyle(
-                  color: Color.fromARGB(255, 255, 5, 230),
-                  fontWeight: FontWeight.bold,
+                  color: cs.primary,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             )

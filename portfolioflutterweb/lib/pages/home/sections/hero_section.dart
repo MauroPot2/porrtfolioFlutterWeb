@@ -24,15 +24,15 @@ class HeroSection extends StatelessWidget {
                 speed: Duration(milliseconds: 70), // velocità del typing
               ),
             ],
-            totalRepeatCount: 5, // non ripete all’infinito
+            totalRepeatCount: 1, // non ripete all’infinito
             pause: Duration(milliseconds: 800),
             displayFullTextOnTap: true,
             stopPauseOnTap: true,
           ),
           SizedBox(height: 16),
           Text(
-            "Sport leader, ciclista, appassionato di tecnologia.\n"
-            "Full Stack Developer — Python & Flutter.",
+            "Flutter Dev, appassionato di tecnologia, ciclista.\n"
+            "Full Stack Developer.",
             style: TextStyle(fontSize: 20),
           ),
         ],
