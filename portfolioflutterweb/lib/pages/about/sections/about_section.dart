@@ -89,7 +89,7 @@ Full Stack per dar vita a progetti che mi rappresentano.
                           vertical: 12,
                         ),
                         child: Text(
-                          "Scarica il mio CV",
+                          "Visualizza il mio CV",
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
