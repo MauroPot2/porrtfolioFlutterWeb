@@ -4,13 +4,18 @@ import 'package:url_launcher/url_launcher.dart';
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
 
-  Future<void> _downloadCV() async {
-    final url = Uri.parse("https://TUO-SERVER/download_cv");
+  static final Uri _cvUrl = Uri.parse(
+    "https://mauropot2.github.io/porrtfolioFlutterWeb/cv.pdf",
+  );
 
-    if(await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+  Future<void> _downloadCV() async {
+    if (await canLaunchUrl(_cvUrl)) {
+      await launchUrl(
+        _cvUrl,
+        mode: LaunchMode.externalApplication,
+      );
     } else {
-      print("Impossibile aprire il link al CV.");
+      debugPrint("Impossibile aprire il link al CV.");
     }
   }
 
@@ -80,13 +85,15 @@ Full Stack per dar vita a progetti che mi rappresentano.
                       icon: const Icon(Icons.file_download),
                       label: const Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 12),
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
                         child: Text(
                           "Scarica il mio CV",
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
