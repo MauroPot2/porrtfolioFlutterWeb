@@ -43,7 +43,7 @@ class _ProjectCardState extends State<ProjectCard> {
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),
             const SizedBox(height: 12),
