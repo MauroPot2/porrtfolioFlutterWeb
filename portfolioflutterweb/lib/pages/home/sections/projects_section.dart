@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../data/projects.dart';
 import '../../../widgets/section_title.dart';
 
@@ -99,7 +100,9 @@ class _ProjectCardState extends State<ProjectCard> {
 
             InkWell(
               borderRadius: BorderRadius.circular(6),
-              onTap: () {},
+              onTap: () {
+                context.go('/projects');
+              },
               child: Text(
                 "→ Scopri di più",
                 style: TextStyle(
