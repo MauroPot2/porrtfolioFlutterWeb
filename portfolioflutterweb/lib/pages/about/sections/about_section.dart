@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../widgets/photo_carousel.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -38,10 +39,24 @@ class AboutSection extends StatelessWidget {
                 flex: isMobile ? 0 : 4,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    "assets/images/about_photo.png",
-                    width: isMobile ? 250 : 350,
+                  child: Expanded(
+                    flex: isMobile ? 0 : 4,
+                    child: SizedBox(
+                      width: isMobile ? 250 : 350,
+                      child: PhotoCarousel(
+                        width: isMobile ? 250 : 350,
+                        imagePaths: const [
+                          "assets/images/about_photo.png",
+                          "assets/images/about_photo_2.png",
+                          "assets/images/about_photo_3.png",
+                          "assets/images/about_photo_4.png",
+                        ],
+                        // opzionale: regola la forma del riquadro
+                        aspectRatio: 4 / 5,
+                      ),
+                    ),
                   ),
+
                 ),
               ),
 
