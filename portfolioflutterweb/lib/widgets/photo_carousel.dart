@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PhotoCarousel extends StatefulWidget {
   final List<String> imagePaths;
   final double width;
-  final double aspectRatio; // es. 1 = quadrato, 4/5 ecc.
+  final double aspectRatio; // es. 1 = quad
 
   const PhotoCarousel({
     super.key,
@@ -116,7 +116,7 @@ class _PhotoCarouselState extends State<PhotoCarousel> {
                   shape: BoxShape.circle,
                   color: selected
                       ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.primary.withOpacity(0.35),
+                      : Theme.of(context).colorScheme.primary.withValues(alpha: 0.35),
                 ),
               ),
             );
@@ -137,7 +137,7 @@ class _NavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final enabled = onTap != null;
     return Material(
-      color: Colors.black.withOpacity(enabled ? 0.35 : 0.15),
+      color: Colors.black.withValues(alpha: enabled ? 0.35 : 0.15),
       shape: const CircleBorder(),
       child: InkWell(
         customBorder: const CircleBorder(),
@@ -147,7 +147,7 @@ class _NavButton extends StatelessWidget {
           child: Icon(
             icon,
             size: 28,
-            color: Colors.white.withOpacity(enabled ? 1 : 0.4),
+            color: Colors.white.withValues(alpha: 0.4),
           ),
         ),
       ),
