@@ -9,10 +9,10 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: const [
             Navbar(),
             AboutSection(),
             ContactSection(),

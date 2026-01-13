@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'viewport_aware_image.dart';
 
 class PhotoCarousel extends StatefulWidget {
   final List<String> imagePaths;
@@ -60,10 +61,12 @@ class _PhotoCarouselState extends State<PhotoCarousel> {
                   itemCount: count,
                   onPageChanged: (i) => setState(() => _index = i),
                   itemBuilder: (context, i) {
-                    return Image.asset(
-                      widget.imagePaths[i],
+                    return ViewportAwareImage(
+                      imagePath: widget.imagePaths[i],
                       fit: BoxFit.cover,
                       width: widget.width,
+                      isAsset: true,
+                      preloadOffset: 100.0, // Carica quando è a 100px dal viewport
                     );
                   },
                 ),

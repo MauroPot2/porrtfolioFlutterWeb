@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../widgets/viewport_aware_image.dart';
 
 class ProjectGallery extends StatelessWidget {
   final dynamic project;
@@ -19,10 +20,12 @@ class ProjectGallery extends StatelessWidget {
         children: images.map<Widget>((img) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              img,
+            child: ViewportAwareImage(
+              imagePath: img,
               width: 300,
               fit: BoxFit.cover,
+              isAsset: true,
+              preloadOffset: 150.0, // Carica quando è a 150px dal viewport
             ),
           );
         }).toList(),
