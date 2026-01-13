@@ -51,7 +51,6 @@ class AboutSection extends StatelessWidget {
                           "assets/images/about_photo_3.png",
                           "assets/images/about_photo_4.png",
                         ],
-                        // opzionale: regola la forma del riquadro
                         aspectRatio: 4 / 5,
                       ),
                     ),
