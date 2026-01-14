@@ -9,7 +9,7 @@ List<Project> myProjects = [
     descriptionLong:
         "CicloVerso è una piattaforma completa che permette la gestione delle prenotazioni, "
         "dei clienti e delle riparazioni in un'officina ciclistica. "
-        "Il progetto integra un backend REST in Flask e un frontend Flutter basato su Material 3.",
+        "Il progetto integra un backend REST in Flask e un frontend Bootstrap con logiche di prenotazione servite da JavaScript.",
     link: "https://github.com/MauroPot2/cicloversoWebApp",
     features: [
       "Prenotazione slot con calendario",

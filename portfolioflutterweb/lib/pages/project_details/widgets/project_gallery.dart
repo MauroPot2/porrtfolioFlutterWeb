@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:portfolioflutterweb/models/project.dart';
 import '../../../widgets/viewport_aware_image.dart';
 
 class ProjectGallery extends StatelessWidget {
-  final dynamic project;
+  final Project project;
 
   const ProjectGallery({super.key, required this.project});
 
@@ -25,7 +26,7 @@ class ProjectGallery extends StatelessWidget {
               width: 300,
               fit: BoxFit.cover,
               isAsset: true,
-              preloadOffset: 150.0, // Carica quando è a 150px dal viewport
+              preloadOffset: 150.0,
             ),
           );
         }).toList(),
