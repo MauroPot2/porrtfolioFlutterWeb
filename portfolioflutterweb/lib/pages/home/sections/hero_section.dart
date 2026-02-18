@@ -31,8 +31,8 @@ class HeroSection extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            "Flutter Dev, appassionato di tecnologia, ciclista.\n"
-            "Full Stack Developer.",
+            "Appassionato di tecnologia, ciclista.\n"
+            "Flutter Developer.",
             style: TextStyle(fontSize: 20),
           ),
         ],

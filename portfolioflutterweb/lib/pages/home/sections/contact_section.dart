@@ -5,7 +5,7 @@ class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
   static const String _email = 'mauroleonardo.potestio@gmail.com';
-  static const String _whatsAppNumber = '+393465470904'; // 👈 METTI IL TUO
+  static const String _whatsAppNumber = '+393465470904'; // 
 
   Future<void> _openEmail() async {
     final uri = Uri(
