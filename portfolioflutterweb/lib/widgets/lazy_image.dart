@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// Widget per il caricamento lazy delle immagini con placeholder e gestione errori
-/// 
-/// Per un vero lazy loading basato sul viewport, usa [ViewportAwareImage]
-class LazyImage extends StatefulWidget {
+/// Immagine con placeholder, fade-in e gestione degli errori.
+///
+/// Può essere usata insieme a un wrapper che rinvia il caricamento
+/// finché l'immagine non è vicina al viewport.
+class LazyImage extends StatelessWidget {
   final String imagePath;
   final BoxFit fit;
   final double? width;
@@ -12,8 +13,9 @@ class LazyImage extends StatefulWidget {
   final Widget? errorWidget;
   final Duration fadeInDuration;
   final bool isAsset;
-  
-  /// Se true, usa cache per le immagini di rete (default: true)
+
+  /// Mantenuto per compatibilità. Flutter applica già la propria cache
+  /// agli ImageProvider usati da questo widget.
   final bool useCache;
 
   const LazyImage({
@@ -29,193 +31,174 @@ class LazyImage extends StatefulWidget {
     this.useCache = true,
   });
 
-  /// Precarca un'immagine asset per migliorare le performance
   static Future<void> precacheAsset(
     BuildContext context,
     String imagePath,
   ) async {
     try {
       await precacheImage(AssetImage(imagePath), context);
-    } catch (e) {
-      debugPrint('Errore nel precaricamento di $imagePath: $e');
+    } catch (error) {
+      debugPrint('Errore nel precaricamento di $imagePath: $error');
     }
   }
 
-  /// Precarca una lista di immagini asset
   static Future<void> precacheAssets(
     BuildContext context,
     List<String> imagePaths,
   ) async {
-    for (final path in imagePaths) {
-      await precacheAsset(context, path);
-    }
+    await Future.wait(
+      imagePaths.map(
+        (path) => precacheAsset(context, path),
+      ),
+    );
   }
 
-  /// Precarca un'immagine da network
   static Future<void> precacheNetwork(
     BuildContext context,
     String imageUrl,
   ) async {
     try {
       await precacheImage(NetworkImage(imageUrl), context);
-    } catch (e) {
-      debugPrint('Errore nel precaricamento di $imageUrl: $e');
+    } catch (error) {
+      debugPrint('Errore nel precaricamento di $imageUrl: $error');
     }
   }
 
-  @override
-  State<LazyImage> createState() => _LazyImageState();
-}
+  int? _cacheDimension(double? value) {
+    if (value == null || !value.isFinite || value <= 0) {
+      return null;
+    }
 
-class _LazyImageState extends State<LazyImage> {
-  bool _isLoading = true;
-  bool _hasError = false;
+    return value.round();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Placeholder di default (skeleton shimmer)
-    final defaultPlaceholder = widget.placeholder ??
+    final resolvedPlaceholder = placeholder ??
         _ImageSkeleton(
-          width: widget.width,
-          height: widget.height,
+          width: width,
+          height: height,
           colorScheme: colorScheme,
           isDark: isDark,
         );
 
-    // Widget di errore di default
-    final defaultErrorWidget = widget.errorWidget ??
-        Container(
-          width: widget.width,
-          height: widget.height,
-          color: colorScheme.surface.withValues(alpha: 0.1),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.broken_image_outlined,
-                  size: 48,
-                  color: colorScheme.onSurface.withValues(alpha: 0.3),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Immagine non disponibile',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: colorScheme.onSurface.withValues(alpha: 0.5),
-                  ),
-                ),
-              ],
-            ),
-          ),
+    final resolvedError = errorWidget ??
+        _ImageError(
+          width: width,
+          height: height,
         );
 
-    if (_hasError) {
-      return defaultErrorWidget;
-    }
+    final image = isAsset
+        ? Image.asset(
+            imagePath,
+            width: width,
+            height: height,
+            fit: fit,
+            gaplessPlayback: true,
+            filterQuality: FilterQuality.medium,
+            errorBuilder: (context, error, stackTrace) => resolvedError,
+            frameBuilder: (
+              context,
+              child,
+              frame,
+              wasSynchronouslyLoaded,
+            ) {
+              if (wasSynchronouslyLoaded) {
+                return child;
+              }
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        // Placeholder durante il caricamento
-        if (_isLoading) defaultPlaceholder,
+              return AnimatedSwitcher(
+                duration: fadeInDuration,
+                child: frame == null
+                    ? KeyedSubtree(
+                        key: ValueKey('placeholder-$imagePath'),
+                        child: resolvedPlaceholder,
+                      )
+                    : KeyedSubtree(
+                        key: ValueKey('image-$imagePath'),
+                        child: child,
+                      ),
+              );
+            },
+          )
+        : Image.network(
+            imagePath,
+            width: width,
+            height: height,
+            fit: fit,
+            gaplessPlayback: true,
+            filterQuality: FilterQuality.medium,
+            cacheWidth: _cacheDimension(width),
+            cacheHeight: _cacheDimension(height),
+            errorBuilder: (context, error, stackTrace) => resolvedError,
+            loadingBuilder: (context, child, progress) {
+              if (progress == null) {
+                return AnimatedOpacity(
+                  opacity: 1,
+                  duration: fadeInDuration,
+                  child: child,
+                );
+              }
 
-        // Immagine principale
-        widget.isAsset
-            ? Image.asset(
-                widget.imagePath,
-                fit: widget.fit,
-                width: widget.width,
-                height: widget.height,
-                errorBuilder: (context, error, stackTrace) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (mounted) {
-                      setState(() {
-                        _isLoading = false;
-                        _hasError = true;
-                      });
-                    }
-                  });
-                  return defaultErrorWidget;
-                },
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  // Se l'immagine è già caricata (cache), nascondi il placeholder subito
-                  if (wasSynchronouslyLoaded || frame != null) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        setState(() => _isLoading = false);
-                      }
-                    });
-                  }
+              return resolvedPlaceholder;
+            },
+          );
 
-                  // Se non c'è ancora il frame, mostra il placeholder
-                  if (frame == null && !wasSynchronouslyLoaded) {
-                    return defaultPlaceholder;
-                  }
-
-                  // Anima il fade-in quando l'immagine è pronta
-                  return AnimatedOpacity(
-                    opacity: frame == null ? 0 : 1,
-                    duration: widget.fadeInDuration,
-                    curve: Curves.easeOut,
-                    child: child,
-                  );
-                },
-              )
-            : Image.network(
-                widget.imagePath,
-                fit: widget.fit,
-                width: widget.width,
-                height: widget.height,
-                cacheWidth: widget.width != null ? widget.width!.toInt() : null,
-                cacheHeight: widget.height != null ? widget.height!.toInt() : null,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        setState(() => _isLoading = false);
-                      }
-                    });
-                    return child;
-                  }
-                  return defaultPlaceholder;
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (mounted) {
-                      setState(() {
-                        _isLoading = false;
-                        _hasError = true;
-                      });
-                    }
-                  });
-                  return defaultErrorWidget;
-                },
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded || frame != null) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        setState(() => _isLoading = false);
-                      }
-                    });
-                  }
-                  return AnimatedOpacity(
-                    opacity: frame == null ? 0 : 1,
-                    duration: widget.fadeInDuration,
-                    curve: Curves.easeOut,
-                    child: child,
-                  );
-                },
-              ),
-      ],
+    return RepaintBoundary(
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: image,
+      ),
     );
   }
 }
 
-/// Widget skeleton shimmer per il placeholder
+class _ImageError extends StatelessWidget {
+  final double? width;
+  final double? height;
+
+  const _ImageError({
+    required this.width,
+    required this.height,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      width: width,
+      height: height,
+      color: colorScheme.primary.withValues(alpha: 0.06),
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.broken_image_outlined,
+            size: 42,
+            color: colorScheme.onSurface.withValues(alpha: 0.34),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Immagine non disponibile',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: colorScheme.onSurface.withValues(alpha: 0.52),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _ImageSkeleton extends StatefulWidget {
   final double? width;
   final double? height;
@@ -223,8 +206,8 @@ class _ImageSkeleton extends StatefulWidget {
   final bool isDark;
 
   const _ImageSkeleton({
-    this.width,
-    this.height,
+    required this.width,
+    required this.height,
     required this.colorScheme,
     required this.isDark,
   });
@@ -235,18 +218,26 @@ class _ImageSkeleton extends StatefulWidget {
 
 class _ImageSkeletonState extends State<_ImageSkeleton>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1400),
     )..repeat();
-    _animation = Tween<double>(begin: -1.0, end: 2.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+
+    _animation = Tween<double>(
+      begin: -1,
+      end: 2,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
     );
   }
 
@@ -258,34 +249,39 @@ class _ImageSkeletonState extends State<_ImageSkeleton>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return Container(
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            color: widget.colorScheme.surface.withValues(
-              alpha: widget.isDark ? 0.2 : 0.3,
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          final baseAlpha = widget.isDark ? 0.20 : 0.34;
+          final highlightAlpha = widget.isDark ? 0.34 : 0.54;
+
+          return Container(
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(
+              color: widget.colorScheme.surface.withValues(
+                alpha: baseAlpha,
+              ),
+              gradient: LinearGradient(
+                begin: Alignment(_animation.value - 1, 0),
+                end: Alignment(_animation.value, 0),
+                colors: [
+                  widget.colorScheme.surface.withValues(
+                    alpha: baseAlpha,
+                  ),
+                  widget.colorScheme.surface.withValues(
+                    alpha: highlightAlpha,
+                  ),
+                  widget.colorScheme.surface.withValues(
+                    alpha: baseAlpha,
+                  ),
+                ],
+              ),
             ),
-            gradient: LinearGradient(
-              begin: Alignment(_animation.value - 1, 0),
-              end: Alignment(_animation.value, 0),
-              colors: [
-                widget.colorScheme.surface.withValues(
-                  alpha: widget.isDark ? 0.2 : 0.3,
-                ),
-                widget.colorScheme.surface.withValues(
-                  alpha: widget.isDark ? 0.35 : 0.5,
-                ),
-                widget.colorScheme.surface.withValues(
-                  alpha: widget.isDark ? 0.2 : 0.3,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

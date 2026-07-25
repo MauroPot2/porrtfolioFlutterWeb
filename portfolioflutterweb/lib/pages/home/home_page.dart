@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:portfolioflutterweb/pages/home/sections/contact_section.dart';
+import 'package:portfolioflutterweb/pages/home/sections/hero_section.dart';
+import 'package:portfolioflutterweb/pages/home/sections/projects_section.dart';
+import 'package:portfolioflutterweb/pages/home/sections/service_section.dart';
+import 'package:portfolioflutterweb/pages/home/sections/skills_section.dart';
 import 'package:portfolioflutterweb/widgets/footer.dart';
-import '../../widgets/navbar.dart';
-import 'sections/hero_section.dart';
-import 'sections/skills_section.dart';
-import 'sections/projects_section.dart';
-import 'sections/contact_section.dart';
+import 'package:portfolioflutterweb/widgets/navbar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: const [
+          children: [
             Navbar(),
             HeroSection(),
             SkillsSection(),
             ProjectsSection(),
+            ServicesSection(),
             ContactSection(),
             Footer(),
           ],

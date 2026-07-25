@@ -1,86 +1,212 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import '../models/project.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'viewport_aware_image.dart';
 
 class ProjectCard extends StatefulWidget {
   final Project project;
-  const ProjectCard({super.key, required this.project});
+
+  const ProjectCard({
+    super.key,
+    required this.project,
+  });
 
   @override
   State<ProjectCard> createState() => _ProjectCardState();
 }
 
 class _ProjectCardState extends State<ProjectCard> {
-  bool hovering = false;
+  bool _isHovered = false;
+  bool _isFocused = false;
+
+  void _openProject() {
+    context.go('/projects/${widget.project.id}');
+  }
 
   @override
   Widget build(BuildContext context) {
     final project = widget.project;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final images = project.images ?? const <String>[];
+    final previewImage = images.isEmpty ? null : images.first;
+    final highlighted = _isHovered || _isFocused;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => hovering = true),
-      onExit: (_) => setState(() => hovering = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 350,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: hovering ? 20 : 10,
-              offset: hovering ? const Offset(0, 6) : const Offset(0, 4),
-              color: Colors.black12,
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              project.title,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 255, 255, 255),
+    return Semantics(
+      button: true,
+      label: 'Apri il caso studio ${project.title}',
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: AnimatedScale(
+          scale: highlighted ? 1.015 : 1,
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: highlighted
+                    ? colorScheme.primary.withValues(alpha: 0.42)
+                    : colorScheme.outline.withValues(alpha: 0.14),
               ),
-            ),
-            const SizedBox(height: 12),
-
-            Text(
-              project.description,
-              style: const TextStyle(fontSize: 16,
-              color: Colors.black54),
-
-            ),
-
-            const SizedBox(height: 20),
-
-            GestureDetector(
-              onTap: () async {
-                final url = widget.project.link;
-                if (await canLaunchUrl(Uri.parse(url))) {
-                  await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                }
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text(
-                    "Scopri di più",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFFF05E6),
-                    ),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: highlighted ? 26 : 14,
+                  offset: Offset(0, highlighted ? 12 : 7),
+                  color: Colors.black.withValues(
+                    alpha: isDark ? 0.28 : 0.08,
                   ),
-                  SizedBox(width: 6),
-                  Icon(Icons.open_in_new, size: 18, color: Color(0xFFFF05E6)),
-                ],
+                ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(20),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: _openProject,
+                onFocusChange: (focused) {
+                  setState(() => _isFocused = focused);
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 185,
+                      child: previewImage == null
+                          ? _ProjectPlaceholder(
+                              colorScheme: colorScheme,
+                            )
+                          : ColoredBox(
+                              color: colorScheme.primary.withValues(
+                                alpha: 0.05,
+                              ),
+                              child: ViewportAwareImage(
+                                imagePath: previewImage,
+                                width: double.infinity,
+                                height: 185,
+                                fit: BoxFit.cover,
+                                isAsset: true,
+                                preloadOffset: 250,
+                                placeholder: _ProjectPlaceholder(
+                                  colorScheme: colorScheme,
+                                ),
+                                errorWidget: _ProjectPlaceholder(
+                                  colorScheme: colorScheme,
+                                ),
+                              ),
+                            ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          22,
+                          22,
+                          22,
+                          20,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              project.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 22,
+                                height: 1.15,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: -0.3,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                            if (project.subtitle?.trim().isNotEmpty ??
+                                false) ...[
+                              const SizedBox(height: 9),
+                              Text(
+                                project.subtitle!.trim(),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  height: 1.4,
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.primary,
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: 14),
+                            Expanded(
+                              child: Text(
+                                project.description,
+                                maxLines: 4,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  height: 1.55,
+                                  color: colorScheme.onSurface.withValues(
+                                    alpha: 0.72,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Text(
+                                  'Apri il caso studio',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                                const SizedBox(width: 7),
+                                Icon(
+                                  Icons.arrow_forward_rounded,
+                                  size: 19,
+                                  color: colorScheme.primary,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class _ProjectPlaceholder extends StatelessWidget {
+  final ColorScheme colorScheme;
+
+  const _ProjectPlaceholder({
+    required this.colorScheme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: colorScheme.primary.withValues(alpha: 0.08),
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.code_rounded,
+        size: 54,
+        color: colorScheme.primary.withValues(alpha: 0.72),
       ),
     );
   }

@@ -8,14 +8,10 @@ class ContactPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            Navbar(),
-            ContactSection(),
-            Footer(),
-          ],
+    return const Scaffold(
+      body: SelectionArea(
+        child: SingleChildScrollView(
+          child: Column(children: [Navbar(), ContactSection(), Footer()]),
         ),
       ),
     );
