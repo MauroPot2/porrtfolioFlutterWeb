@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "shavette-16c2f"
+    "default": "shavette-16c2f",
+    "portfolio": "portfolio-15-v1"
   }
 }
-
