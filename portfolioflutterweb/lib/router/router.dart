@@ -4,22 +4,14 @@ import 'package:portfolioflutterweb/pages/contact/contact_page.dart';
 import 'package:portfolioflutterweb/pages/home/home_page.dart';
 import 'package:portfolioflutterweb/pages/project_details/project_details_page.dart';
 import 'package:portfolioflutterweb/pages/projects/projects_page.dart';
-import 'package:portfolioflutterweb/pages/shavette/shavette_page.dart';
 
 class AppRouter {
   static final router = GoRouter(
-    redirect: (context, state) {
-      if (state.uri.path == '/shavette/') {
-        return state.uri.replace(path: '/shavette').toString();
-      }
-      return null;
-    },
     routes: [
       GoRoute(path: '/', builder: (context, _) => const HomePage()),
       GoRoute(path: '/projects', builder: (context, _) => const ProjectsPage()),
       GoRoute(path: '/about', builder: (context, _) => const AboutPage()),
       GoRoute(path: '/contact', builder: (context, _) => const ContactPage()),
-      GoRoute(path: '/shavette', builder: (context, _) => const ShavettePage()),
       GoRoute(
         path: '/projects/:id',
         builder: (context, state) {

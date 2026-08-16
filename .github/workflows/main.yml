@@ -22,6 +22,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Test static Shavette landing
+        working-directory: ./portfolioflutterweb
+        run: node --test test/shavette_static_test.js
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
