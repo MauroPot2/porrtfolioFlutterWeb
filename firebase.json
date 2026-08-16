@@ -11,6 +11,25 @@
         "*.local"
       ]
     }
-  ]
+  ],
+  "hosting": {
+    "public": "portfolioflutterweb/build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "rewrites": [
+      {
+        "source": "/shavette",
+        "destination": "/shavette/index.html"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }
-
