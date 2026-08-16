@@ -1,0 +1,19 @@
+{
+  "name": "shavette-founding-salons-functions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Firebase endpoint for Shavette Founding Salons applications",
+  "main": "index.js",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "deploy": "firebase deploy --only functions:founding-salons"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.6.0",
+    "firebase-functions": "^7.0.0"
+  }
+}
+
