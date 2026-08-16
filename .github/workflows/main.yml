@@ -36,6 +36,10 @@ jobs:
         working-directory: ./portfolioflutterweb
         run: flutter build web --release --base-href "/"
 
+      - name: Configure SPA fallback
+        working-directory: ./portfolioflutterweb
+        run: cp build/web/index.html build/web/404.html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
