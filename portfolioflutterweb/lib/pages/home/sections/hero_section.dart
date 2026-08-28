@@ -202,7 +202,6 @@ class _HeroVisual extends StatelessWidget {
                 width: carouselWidth,
                 aspectRatio: 16 / 10,
                 imagePaths: const [
-                  'assets/projects/shavette_1.png',
                   'assets/projects/ponte_1.png',
                   'assets/projects/cicloverso_1.png',
                   'assets/projects/1.png',
