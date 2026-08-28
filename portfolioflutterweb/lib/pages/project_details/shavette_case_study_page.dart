@@ -20,7 +20,7 @@ class ShavetteCaseStudyPage extends StatelessWidget {
   );
 
   Future<void> _open(Uri uri) async {
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
+    await launchUrl(uri);
   }
 
   @override
@@ -35,13 +35,12 @@ class ShavetteCaseStudyPage extends StatelessWidget {
                 onProductTap: () => _open(_productUri),
                 onLinkedInTap: () => _open(_linkedinUri),
               ),
-              const _CaseStudyIntro(),
-              const _WhatIBuilt(),
+              const _ContextSection(),
+              const _ResponsibilitiesSection(),
               const _ArchitectureSection(),
-              const _EngineeringChallenges(),
-              const _ProductThinking(),
+              const _ChallengesSection(),
               const _EvidenceSection(),
-              _FinalCta(
+              _ContactSection(
                 onLinkedInTap: () => _open(_linkedinUri),
                 onEmailTap: () => _open(_mailUri),
               ),
@@ -65,7 +64,7 @@ class _Hero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final scheme = Theme.of(context).colorScheme;
 
     return Container(
       width: double.infinity,
@@ -74,27 +73,27 @@ class _Hero extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF121827),
-            Color(0xFF171D31),
-            Color(0xFF241B32),
+            Color(0xFF111827),
+            Color(0xFF151B2E),
+            Color(0xFF251A32),
           ],
         ),
       ),
-      child: _PageWidth(
-        padding: const EdgeInsets.symmetric(vertical: 72),
+      child: _ContentWidth(
+        verticalPadding: 72,
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final compact = constraints.maxWidth < 860;
+            final isCompact = constraints.maxWidth < 860;
 
             final copy = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: const [
-                    _HeroBadge('PRODUCT CASE STUDY'),
-                    _HeroBadge('REPOSITORY PRIVATE'),
+                const Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _DarkBadge('PRODUCT CASE STUDY'),
+                    _DarkBadge('REPOSITORY PRIVATE'),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -104,23 +103,23 @@ class _Hero extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 58,
                     height: 1,
+                    letterSpacing: -2,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: -2.2,
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 Text(
-                  'Da idea a prodotto: booking, backend serverless, notifiche, subscription e release engineering.',
+                  'Flutter, Firebase e responsabilità end-to-end su un prodotto reale.',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.82),
-                    fontSize: 22,
-                    height: 1.45,
-                    fontWeight: FontWeight.w500,
+                    color: Colors.white.withValues(alpha: 0.86),
+                    fontSize: 23,
+                    height: 1.4,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
                 Text(
-                  'Un case study tecnico sul prodotto che uso per dimostrare come affronto problemi reali di sviluppo Flutter: architettura, dati, autenticazione, permessi, backend, monetizzazione e distribuzione.',
+                  'Shavette è il progetto con cui mostro come affronto problemi che vanno oltre la UI: booking, autenticazione, ruoli, backend serverless, notifiche, subscription, flavor e distribuzione mobile.',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.66),
                     fontSize: 16,
@@ -132,14 +131,14 @@ class _Hero extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    _TechChip('Flutter'),
-                    _TechChip('Dart'),
-                    _TechChip('Riverpod'),
-                    _TechChip('Firebase Auth'),
-                    _TechChip('Cloud Firestore'),
-                    _TechChip('Cloud Functions'),
-                    _TechChip('FCM'),
-                    _TechChip('RevenueCat'),
+                    _DarkChip('Flutter'),
+                    _DarkChip('Dart'),
+                    _DarkChip('Riverpod'),
+                    _DarkChip('Firebase Auth'),
+                    _DarkChip('Cloud Firestore'),
+                    _DarkChip('Cloud Functions'),
+                    _DarkChip('FCM'),
+                    _DarkChip('RevenueCat'),
                   ],
                 ),
                 const SizedBox(height: 30),
@@ -152,8 +151,8 @@ class _Hero extends StatelessWidget {
                       icon: const Icon(Icons.open_in_new_rounded),
                       label: const Text('Vedi il prodotto'),
                       style: FilledButton.styleFrom(
-                        backgroundColor: colorScheme.primary,
-                        foregroundColor: colorScheme.onPrimary,
+                        backgroundColor: scheme.primary,
+                        foregroundColor: scheme.onPrimary,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 22,
                           vertical: 18,
@@ -167,7 +166,7 @@ class _Hero extends StatelessWidget {
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.white,
                         side: BorderSide(
-                          color: Colors.white.withValues(alpha: 0.3),
+                          color: Colors.white.withValues(alpha: 0.28),
                         ),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 22,
@@ -182,9 +181,9 @@ class _Hero extends StatelessWidget {
 
             final visual = Container(
               constraints: const BoxConstraints(maxWidth: 390),
-              padding: const EdgeInsets.all(22),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.06),
+                color: Colors.white.withValues(alpha: 0.055),
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
                   color: Colors.white.withValues(alpha: 0.11),
@@ -193,7 +192,7 @@ class _Hero extends StatelessWidget {
               child: Column(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(22),
+                    borderRadius: BorderRadius.circular(20),
                     child: AspectRatio(
                       aspectRatio: 1.6,
                       child: Image.asset(
@@ -202,20 +201,20 @@ class _Hero extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 16),
                   const Row(
                     children: [
                       Expanded(
                         child: _Metric(
-                          value: '2',
-                          label: 'flavor mobile',
+                          value: 'E2E',
+                          label: 'ownership',
                         ),
                       ),
                       SizedBox(width: 10),
                       Expanded(
                         child: _Metric(
-                          value: 'E2E',
-                          label: 'ownership',
+                          value: 'Cloud',
+                          label: 'backend',
                         ),
                       ),
                     ],
@@ -225,8 +224,8 @@ class _Hero extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _Metric(
-                          value: 'Cloud',
-                          label: 'backend',
+                          value: '2',
+                          label: 'mobile flavor',
                         ),
                       ),
                       SizedBox(width: 10),
@@ -242,7 +241,7 @@ class _Hero extends StatelessWidget {
               ),
             );
 
-            if (compact) {
+            if (isCompact) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -268,8 +267,8 @@ class _Hero extends StatelessWidget {
   }
 }
 
-class _CaseStudyIntro extends StatelessWidget {
-  const _CaseStudyIntro();
+class _ContextSection extends StatelessWidget {
+  const _ContextSection();
 
   @override
   Widget build(BuildContext context) {
@@ -277,26 +276,26 @@ class _CaseStudyIntro extends StatelessWidget {
       eyebrow: '01 · CONTESTO',
       title: 'Non una demo: un prodotto con vincoli reali',
       intro:
-          'Shavette nasce come piattaforma di prenotazione per barber shop e saloni. Il progetto mi ha portato oltre la UI: ho dovuto progettare flussi, ruoli, dati, backend, notifiche, acquisti e distribuzione, gestendo anche i vincoli imposti dagli store.',
-      child: _GridCards(
+          'Shavette è una piattaforma di prenotazione per barber shop e saloni. Il progetto mi ha portato a gestire contemporaneamente esperienza utente, dominio booking, sicurezza, backend, monetizzazione e vincoli degli store.',
+      child: _ResponsiveGrid(
         children: [
           _InfoCard(
             icon: Icons.groups_2_outlined,
-            title: 'Due tipologie di utente',
+            title: 'Utenti con esigenze diverse',
             body:
-                'Cliente e professionista condividono lo stesso ecosistema, ma con flussi, permessi e obiettivi diversi.',
+                'Cliente, owner e staff condividono lo stesso ecosistema, ma con flussi e permessi differenti.',
           ),
           _InfoCard(
             icon: Icons.event_available_outlined,
             title: 'Booking come dominio centrale',
             body:
-                'Disponibilità, servizi, staff, chiusure, agenda e reminder devono rimanere coerenti nello stesso modello dati.',
+                'Disponibilità, servizi, agenda, staff, chiusure e reminder devono rimanere coerenti nello stesso modello dati.',
           ),
           _InfoCard(
             icon: Icons.storefront_outlined,
-            title: 'White-label reale',
+            title: 'White-label dalla stessa codebase',
             body:
-                'Il progetto usa flavor distinti per produrre applicazioni brandizzate partendo dalla stessa codebase.',
+                'Flavor distinti permettono di produrre applicazioni brandizzate mantenendo condivisa la logica principale.',
           ),
         ],
       ),
@@ -304,54 +303,54 @@ class _CaseStudyIntro extends StatelessWidget {
   }
 }
 
-class _WhatIBuilt extends StatelessWidget {
-  const _WhatIBuilt();
+class _ResponsibilitiesSection extends StatelessWidget {
+  const _ResponsibilitiesSection();
 
   @override
   Widget build(BuildContext context) {
     return const _Section(
-      tone: _SectionTone.soft,
-      eyebrow: '02 · COSA HO COSTRUITO',
-      title: 'Responsabilità end-to-end',
+      softBackground: true,
+      eyebrow: '02 · RESPONSABILITÀ',
+      title: 'Dal widget al backend, fino alla release',
       intro:
-          'Il valore del progetto non è una singola feature, ma l’insieme di decisioni necessarie per trasformare una codebase Flutter in un prodotto utilizzabile e distribuibile.',
-      child: _GridCards(
+          'Il valore del progetto è nell’ownership del ciclo completo: non una singola schermata, ma l’insieme di componenti necessari per far funzionare un prodotto mobile.',
+      child: _ResponsiveGrid(
         children: [
           _InfoCard(
             icon: Icons.phone_iphone_rounded,
             title: 'Applicazione Flutter',
             body:
-                'UI responsive, navigazione, state management con Riverpod e separazione delle responsabilità per feature.',
+                'Interfaccia, navigazione con GoRouter, state management con Riverpod e organizzazione feature-first.',
           ),
           _InfoCard(
             icon: Icons.lock_outline_rounded,
             title: 'Auth, ruoli e permessi',
             body:
-                'Firebase Authentication, accesso salon/staff e logiche che distinguono owner, collaboratori e utenti finali.',
+                'Firebase Authentication e logiche di accesso dedicate a owner, staff e utenti finali.',
           ),
           _InfoCard(
             icon: Icons.cloud_queue_rounded,
             title: 'Backend serverless',
             body:
-                'Cloud Functions e Firestore per disponibilità, prenotazioni, gestione staff, comunicazioni e operazioni sensibili.',
+                'Cloud Functions e Firestore per disponibilità, prenotazioni, staff e operazioni sensibili.',
           ),
           _InfoCard(
             icon: Icons.notifications_active_outlined,
             title: 'Push e reminder',
             body:
-                'Firebase Cloud Messaging e notifiche locali per eventi applicativi e promemoria legati agli appuntamenti.',
+                'Firebase Cloud Messaging e notifiche locali per eventi applicativi e promemoria appuntamento.',
           ),
           _InfoCard(
             icon: Icons.workspace_premium_outlined,
             title: 'Subscription',
             body:
-                'RevenueCat per la gestione degli entitlement e dei flussi di abbonamento tra Android e iOS.',
+                'RevenueCat per entitlement e flussi di abbonamento coerenti tra Android e iOS.',
           ),
           _InfoCard(
             icon: Icons.rocket_launch_outlined,
             title: 'Build & release',
             body:
-                'Flavor, versioning, configurazioni per piattaforma e gestione delle richieste di review degli store.',
+                'Flavor, versioning, configurazioni piattaforma e gestione dei requisiti di review degli store.',
           ),
         ],
       ),
@@ -368,15 +367,15 @@ class _ArchitectureSection extends StatelessWidget {
 
     return _Section(
       eyebrow: '03 · ARCHITETTURA',
-      title: 'Una pipeline semplice da leggere, ma con responsabilità separate',
+      title: 'Responsabilità separate, flusso leggibile',
       intro:
-          'L’obiettivo architetturale è mantenere UI, stato, accesso ai dati e logica server separati abbastanza da poter evolvere il prodotto senza concentrare tutto nei widget.',
+          'L’architettura mantiene distinti presentazione, stato, accesso ai dati e logica server, così da evitare di concentrare il comportamento applicativo nei widget.',
       child: Column(
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
               final compact = constraints.maxWidth < 760;
-              final items = const [
+              const nodes = [
                 _ArchitectureNode(
                   icon: Icons.widgets_outlined,
                   title: 'Presentation',
@@ -402,9 +401,9 @@ class _ArchitectureSection extends StatelessWidget {
               if (compact) {
                 return Column(
                   children: [
-                    for (var i = 0; i < items.length; i++) ...[
-                      items[i],
-                      if (i != items.length - 1)
+                    for (var i = 0; i < nodes.length; i++) ...[
+                      nodes[i],
+                      if (i < nodes.length - 1)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
@@ -418,11 +417,10 @@ class _ArchitectureSection extends StatelessWidget {
               }
 
               return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  for (var i = 0; i < items.length; i++) ...[
-                    Expanded(child: items[i]),
-                    if (i != items.length - 1)
+                  for (var i = 0; i < nodes.length; i++) ...[
+                    Expanded(child: nodes[i]),
+                    if (i < nodes.length - 1)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Icon(
@@ -438,26 +436,26 @@ class _ArchitectureSection extends StatelessWidget {
           const SizedBox(height: 24),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(22),
             decoration: BoxDecoration(
-              color: scheme.surfaceContainerHighest.withValues(alpha: 0.35),
+              color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: scheme.outline.withValues(alpha: 0.12),
               ),
             ),
             child: const Wrap(
-              spacing: 10,
-              runSpacing: 10,
+              spacing: 9,
+              runSpacing: 9,
               children: [
-                _OutlineChip('Firebase Authentication'),
-                _OutlineChip('Cloud Firestore'),
-                _OutlineChip('Cloud Functions'),
-                _OutlineChip('Firebase Messaging'),
-                _OutlineChip('Google Sign-In'),
-                _OutlineChip('Sign in with Apple'),
-                _OutlineChip('RevenueCat'),
-                _OutlineChip('Flutter flavors'),
+                _LightChip('Firebase Authentication'),
+                _LightChip('Cloud Firestore'),
+                _LightChip('Cloud Functions'),
+                _LightChip('Firebase Messaging'),
+                _LightChip('Google Sign-In'),
+                _LightChip('Sign in with Apple'),
+                _LightChip('RevenueCat'),
+                _LightChip('Flutter flavors'),
               ],
             ),
           ),
@@ -467,78 +465,42 @@ class _ArchitectureSection extends StatelessWidget {
   }
 }
 
-class _EngineeringChallenges extends StatelessWidget {
-  const _EngineeringChallenges();
+class _ChallengesSection extends StatelessWidget {
+  const _ChallengesSection();
 
   @override
   Widget build(BuildContext context) {
     return const _Section(
-      tone: _SectionTone.soft,
+      softBackground: true,
       eyebrow: '04 · ENGINEERING CHALLENGES',
-      title: 'Problemi che non compaiono nei tutorial',
+      title: 'Problemi che non si risolvono con un tutorial',
       intro:
-          'Le parti più formative sono state quelle in cui il problema non era “scrivere un widget”, ma far convivere sicurezza, asincronia, business logic e vincoli esterni.',
+          'Le parti più formative sono state quelle in cui sicurezza, asincronia, business logic e servizi esterni dovevano convivere senza rendere fragile il prodotto.',
       child: _ChallengeList(
         items: [
           _Challenge(
             number: '01',
-            title: 'Accesso multi-ruolo senza allargare troppo i permessi',
+            title: 'Accesso multi-ruolo',
             body:
-                'Ho separato le responsabilità tra owner e staff, con controlli lato backend e test dedicati sulle regole di accesso.',
+                'Separazione tra owner e staff, controlli lato backend e test dedicati per evitare permessi eccessivi.',
           ),
           _Challenge(
             number: '02',
-            title: 'Reminder affidabili legati agli appuntamenti',
+            title: 'Reminder legati agli appuntamenti',
             body:
-                'I promemoria richiedono sincronizzazione tra dati Firestore, scheduling server-side, token FCM e comportamento locale del dispositivo.',
+                'Sincronizzazione tra dati Firestore, scheduling server-side, token FCM e comportamento locale del dispositivo.',
           ),
           _Challenge(
             number: '03',
-            title: 'Subscription coerenti tra app e backend',
+            title: 'Subscription e stato applicativo',
             body:
-                'La UI non può essere l’unica fonte di verità: gli entitlement RevenueCat devono essere gestiti in modo coerente con lo stato applicativo.',
+                'Gli entitlement RevenueCat non vengono trattati come semplice stato UI, ma come parte del modello di accesso al prodotto.',
           ),
           _Challenge(
             number: '04',
             title: 'Una codebase, più brand',
             body:
-                'Flavor e configurazioni separate permettono di cambiare bundle, icone e identità mantenendo condivisa la logica principale.',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProductThinking extends StatelessWidget {
-  const _ProductThinking();
-
-  @override
-  Widget build(BuildContext context) {
-    return const _Section(
-      eyebrow: '05 · PRODUCT THINKING',
-      title: 'Sviluppare anche intorno al codice',
-      intro:
-          'Shavette mi ha costretto a trattare lo sviluppo come parte di un prodotto: costi cloud, onboarding, privacy, distribuzione, affidabilità e semplicità d’uso hanno conseguenze tecniche concrete.',
-      child: _GridCards(
-        children: [
-          _InfoCard(
-            icon: Icons.price_check_outlined,
-            title: 'Cost awareness',
-            body:
-                'Query, Functions e notifiche vengono progettate tenendo presente il consumo delle risorse Firebase.',
-          ),
-          _InfoCard(
-            icon: Icons.verified_user_outlined,
-            title: 'Store compliance',
-            body:
-                'Privacy, guest access, acquisti in-app e account deletion influenzano direttamente i flussi applicativi.',
-          ),
-          _InfoCard(
-            icon: Icons.monitor_heart_outlined,
-            title: 'Production mindset',
-            body:
-                'Bug, test, deploy e reminder vengono trattati come problemi di affidabilità del prodotto, non solo di interfaccia.',
+                'Flavor e configurazioni separate gestiscono bundle, icone e identità mantenendo condiviso il core applicativo.',
           ),
         ],
       ),
@@ -551,37 +513,54 @@ class _EvidenceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-
     return _Section(
-      tone: _SectionTone.soft,
-      eyebrow: '06 · EVIDENZE',
-      title: 'Cosa dimostra questo progetto',
+      eyebrow: '05 · COSA DIMOSTRA',
+      title: 'Competenze applicate, non soltanto dichiarate',
       intro:
-          'Il repository è privato perché Shavette è un prodotto commerciale. Questa pagina espone però le responsabilità tecniche e le scelte verificabili nel prodotto, senza pubblicare il codice sorgente.',
+          'Il repository è privato perché Shavette è un prodotto commerciale. Il case study rende però visibili le responsabilità tecniche e il tipo di problemi affrontati senza pubblicare il sorgente.',
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final compact = constraints.maxWidth < 840;
+          final compact = constraints.maxWidth < 820;
 
-          final image = ClipRRect(
+          final screenshot = ClipRRect(
             borderRadius: BorderRadius.circular(24),
-            child: Container(
-              color: scheme.surface,
-              child: Image.asset(
-                'assets/images/shavette/shavette_agenda.jpg',
-                fit: BoxFit.cover,
-              ),
+            child: Image.asset(
+              'assets/images/shavette/shavette_agenda.jpg',
+              fit: BoxFit.cover,
             ),
           );
 
-          const bullets = _EvidenceBullets();
+          const evidence = Column(
+            children: [
+              _EvidenceItem(
+                title: 'Flutter oltre la UI',
+                body:
+                    'State management, routing, integrazione di servizi nativi e gestione asincrona.',
+              ),
+              _EvidenceItem(
+                title: 'Backend e sicurezza',
+                body:
+                    'Cloud Functions, Firestore, autenticazione, ruoli e test lato server.',
+              ),
+              _EvidenceItem(
+                title: 'Servizi reali',
+                body:
+                    'FCM, RevenueCat, Google Sign-In, Sign in with Apple e integrazione calendario.',
+              ),
+              _EvidenceItem(
+                title: 'Ownership del ciclo di vita',
+                body:
+                    'Feature, bugfix, test, deploy, flavor e requisiti legati agli store.',
+              ),
+            ],
+          );
 
           if (compact) {
             return Column(
               children: [
-                image,
+                screenshot,
                 const SizedBox(height: 28),
-                bullets,
+                evidence,
               ],
             );
           }
@@ -589,9 +568,9 @@ class _EvidenceSection extends StatelessWidget {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(flex: 5, child: image),
-              const SizedBox(width: 46),
-              const Expanded(flex: 5, child: bullets),
+              Expanded(flex: 5, child: screenshot),
+              const SizedBox(width: 44),
+              const Expanded(flex: 5, child: evidence),
             ],
           );
         },
@@ -600,43 +579,11 @@ class _EvidenceSection extends StatelessWidget {
   }
 }
 
-class _EvidenceBullets extends StatelessWidget {
-  const _EvidenceBullets();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        _EvidenceItem(
-          title: 'Flutter oltre la UI',
-          body:
-              'State management, routing, integrazione servizi nativi e gestione asincrona.',
-        ),
-        _EvidenceItem(
-          title: 'Backend e sicurezza',
-          body:
-              'Cloud Functions, Firestore, auth, regole di accesso e test server-side.',
-        ),
-        _EvidenceItem(
-          title: 'Integrazione di servizi reali',
-          body:
-              'FCM, RevenueCat, Google Sign-In, Sign in with Apple e calendari dispositivo.',
-        ),
-        _EvidenceItem(
-          title: 'Ownership del ciclo di vita',
-          body:
-              'Dalla feature al deploy, passando per bugfix, review degli store e manutenzione.',
-        ),
-      ],
-    );
-  }
-}
-
-class _FinalCta extends StatelessWidget {
+class _ContactSection extends StatelessWidget {
   final VoidCallback onLinkedInTap;
   final VoidCallback onEmailTap;
 
-  const _FinalCta({
+  const _ContactSection({
     required this.onLinkedInTap,
     required this.onEmailTap,
   });
@@ -645,16 +592,16 @@ class _FinalCta extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
 
-    return _PageWidth(
-      padding: const EdgeInsets.symmetric(vertical: 72),
+    return _ContentWidth(
+      verticalPadding: 72,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(36),
+        padding: const EdgeInsets.all(34),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              scheme.primary.withValues(alpha: 0.14),
-              scheme.secondary.withValues(alpha: 0.08),
+              scheme.primary.withValues(alpha: 0.13),
+              scheme.secondary.withValues(alpha: 0.07),
             ],
           ),
           borderRadius: BorderRadius.circular(28),
@@ -675,8 +622,8 @@ class _FinalCta extends StatelessWidget {
                     color: scheme.onSurface,
                     fontSize: 28,
                     height: 1.2,
-                    fontWeight: FontWeight.w850,
-                    letterSpacing: -0.6,
+                    letterSpacing: -0.5,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -698,7 +645,7 @@ class _FinalCta extends StatelessWidget {
                 FilledButton.icon(
                   onPressed: onLinkedInTap,
                   icon: const Icon(Icons.person_add_alt_1_rounded),
-                  label: const Text('Contattami su LinkedIn'),
+                  label: const Text('LinkedIn'),
                 ),
                 OutlinedButton.icon(
                   onPressed: onEmailTap,
@@ -713,7 +660,7 @@ class _FinalCta extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   copy,
-                  const SizedBox(height: 26),
+                  const SizedBox(height: 24),
                   actions,
                 ],
               );
@@ -722,7 +669,7 @@ class _FinalCta extends StatelessWidget {
             return Row(
               children: [
                 Expanded(child: copy),
-                const SizedBox(width: 36),
+                const SizedBox(width: 32),
                 actions,
               ],
             );
@@ -733,21 +680,19 @@ class _FinalCta extends StatelessWidget {
   }
 }
 
-enum _SectionTone { plain, soft }
-
 class _Section extends StatelessWidget {
   final String eyebrow;
   final String title;
   final String intro;
   final Widget child;
-  final _SectionTone tone;
+  final bool softBackground;
 
   const _Section({
     required this.eyebrow,
     required this.title,
     required this.intro,
     required this.child,
-    this.tone = _SectionTone.plain,
+    this.softBackground = false,
   });
 
   @override
@@ -756,11 +701,11 @@ class _Section extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: tone == _SectionTone.soft
+      color: softBackground
           ? scheme.surfaceContainerLowest.withValues(alpha: 0.5)
           : null,
-      child: _PageWidth(
-        padding: const EdgeInsets.symmetric(vertical: 64),
+      child: _ContentWidth(
+        verticalPadding: 64,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -769,7 +714,7 @@ class _Section extends StatelessWidget {
               style: TextStyle(
                 color: scheme.primary,
                 fontSize: 12,
-                letterSpacing: 1.5,
+                letterSpacing: 1.4,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -783,7 +728,7 @@ class _Section extends StatelessWidget {
                   fontSize: 36,
                   height: 1.15,
                   letterSpacing: -1,
-                  fontWeight: FontWeight.w850,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
@@ -808,26 +753,26 @@ class _Section extends StatelessWidget {
   }
 }
 
-class _PageWidth extends StatelessWidget {
+class _ContentWidth extends StatelessWidget {
   final Widget child;
-  final EdgeInsetsGeometry padding;
+  final double verticalPadding;
 
-  const _PageWidth({
+  const _ContentWidth({
     required this.child,
-    required this.padding,
+    required this.verticalPadding,
   });
 
   @override
   Widget build(BuildContext context) {
+    final horizontal = MediaQuery.sizeOf(context).width < 700 ? 20.0 : 36.0;
+
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1180),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            MediaQuery.sizeOf(context).width < 700 ? 20 : 36,
-            padding.vertical / 2,
-            MediaQuery.sizeOf(context).width < 700 ? 20 : 36,
-            padding.vertical / 2,
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontal,
+            vertical: verticalPadding,
           ),
           child: child,
         ),
@@ -836,10 +781,10 @@ class _PageWidth extends StatelessWidget {
   }
 }
 
-class _GridCards extends StatelessWidget {
+class _ResponsiveGrid extends StatelessWidget {
   final List<Widget> children;
 
-  const _GridCards({required this.children});
+  const _ResponsiveGrid({required this.children});
 
   @override
   Widget build(BuildContext context) {
@@ -884,7 +829,7 @@ class _InfoCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return Container(
-      constraints: const BoxConstraints(minHeight: 190),
+      constraints: const BoxConstraints(minHeight: 188),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: scheme.surface,
@@ -1055,7 +1000,7 @@ class _ChallengeList extends StatelessWidget {
               },
             ),
           ),
-          if (i != items.length - 1)
+          if (i < items.length - 1)
             Divider(
               color: scheme.outline.withValues(alpha: 0.12),
               height: 1,
@@ -1141,10 +1086,10 @@ class _EvidenceItem extends StatelessWidget {
   }
 }
 
-class _HeroBadge extends StatelessWidget {
+class _DarkBadge extends StatelessWidget {
   final String text;
 
-  const _HeroBadge(this.text);
+  const _DarkBadge(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -1162,7 +1107,7 @@ class _HeroBadge extends StatelessWidget {
         style: TextStyle(
           color: Colors.white.withValues(alpha: 0.72),
           fontSize: 11,
-          letterSpacing: 1.2,
+          letterSpacing: 1.1,
           fontWeight: FontWeight.w800,
         ),
       ),
@@ -1170,10 +1115,10 @@ class _HeroBadge extends StatelessWidget {
   }
 }
 
-class _TechChip extends StatelessWidget {
+class _DarkChip extends StatelessWidget {
   final String text;
 
-  const _TechChip(this.text);
+  const _DarkChip(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -1188,17 +1133,17 @@ class _TechChip extends StatelessWidget {
         style: TextStyle(
           color: Colors.white.withValues(alpha: 0.82),
           fontSize: 12.5,
-          fontWeight: FontWeight.w650,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
   }
 }
 
-class _OutlineChip extends StatelessWidget {
+class _LightChip extends StatelessWidget {
   final String text;
 
-  const _OutlineChip(this.text);
+  const _LightChip(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -1218,7 +1163,7 @@ class _OutlineChip extends StatelessWidget {
         style: TextStyle(
           color: scheme.onSurface.withValues(alpha: 0.75),
           fontSize: 13,
-          fontWeight: FontWeight.w650,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -1250,7 +1195,7 @@ class _Metric extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
               fontSize: 17,
-              fontWeight: FontWeight.w850,
+              fontWeight: FontWeight.w800,
             ),
           ),
           const SizedBox(height: 3),
