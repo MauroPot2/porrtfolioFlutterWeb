@@ -6,6 +6,7 @@ import 'package:portfolioflutterweb/widgets/navbar.dart';
 import '../../data/projects.dart';
 import '../../models/project.dart';
 import '../../widgets/section_container.dart';
+import 'shavette_case_study_page.dart';
 import 'widgets/project_architecture.dart';
 import 'widgets/project_features.dart';
 import 'widgets/project_gallery.dart';
@@ -30,6 +31,10 @@ class ProjectDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (projectId == 'shavette') {
+      return const ShavetteCaseStudyPage();
+    }
+
     final project = _findProject();
 
     return Scaffold(
