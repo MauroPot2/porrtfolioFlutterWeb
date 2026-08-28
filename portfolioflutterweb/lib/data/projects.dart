@@ -4,38 +4,35 @@ List<Project> myProjects = [
   Project(
     id: "shavette",
     title: "Shavette",
-    subtitle: "App White-Label per Booking & Servizi",
+    subtitle: "Flutter Product Case Study · Booking SaaS",
     description:
-        "Applicazione mobile completa per la prenotazione di servizi, strutturata per la pubblicazione sugli store.",
+        "Prodotto mobile sviluppato end-to-end con Flutter e Firebase: booking, ruoli, backend serverless, notifiche, subscription e release multi-brand.",
     descriptionLong:
-        "Shavette è una soluzione white-label pensata per i professionisti del settore servizi. Progettata con un'architettura pulita e feature-first, offre un'esperienza utente fluida con notifiche push integrate e un backend robusto in grado di scalare in base alle esigenze del business.",
-    link:
-        "https://mauropot.com", // Aggiorna con il link corretto se disponibile
+        "Shavette è il progetto con cui mostro come affronto problemi reali di prodotto oltre la UI. La stessa codebase gestisce flussi cliente e professionista, autenticazione, permessi staff, prenotazioni, backend Firebase, notifiche FCM, subscription RevenueCat e flavor distinti per più brand.",
+    link: "https://mauropot.com/shavette",
     features: [
-      "Sistema di prenotazioni in tempo reale",
-      "Architettura Clean & Feature-First",
-      "Gestione di stato avanzata con Riverpod 3",
-      "Routing ottimizzato con GoRouter",
-      "Infrastruttura Cloud e Backend as a Service",
+      "Booking e disponibilità con Cloud Firestore",
+      "State management con Riverpod e routing con GoRouter",
+      "Firebase Authentication, ruoli owner/staff e access control",
+      "Cloud Functions Node.js per logiche server-side",
+      "Push notification e reminder con Firebase Cloud Messaging",
+      "Subscription ed entitlement con RevenueCat",
+      "Flavor Android/iOS per distribuzione white-label",
     ],
     architecture: """
 Frontend: Flutter, Dart
-State Management: Riverpod 3
+State management: Riverpod
 Routing: GoRouter
-Backend & DB: Google Firebase, Firestore, Cloud Functions
-Deployment: iOS App Store & Google Play
+Backend: Firebase Cloud Functions (Node.js)
+Auth & data: Firebase Authentication, Cloud Firestore
+Messaging: Firebase Cloud Messaging + local notifications
+Subscription: RevenueCat
+Release: Android / iOS, Flutter flavors
 """,
-    snippet: """
-// Esempio di gestione stato con Riverpod
-@riverpod
-class BookingNotifier extends _\$BookingNotifier {
-  @override
-  Future<List<Booking>> build() async {
-    return ref.watch(bookingRepositoryProvider).fetchActiveBookings();
-  }
-}
-""",
-    images: [],
+    snippet: null,
+    images: [
+      "assets/images/shavette/shavette_agenda.jpg",
+    ],
   ),
   Project(
     id: "cicloverso",
