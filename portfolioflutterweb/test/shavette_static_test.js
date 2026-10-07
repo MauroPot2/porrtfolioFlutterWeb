@@ -12,14 +12,18 @@ const termsHtml = fs.readFileSync(
   path.join(landingRoot, "terms", "index.html"),
   "utf8",
 );
+const privacyHtml = fs.readFileSync(
+  path.join(landingRoot, "privacy", "index.html"),
+  "utf8",
+);
 const css = fs.readFileSync(path.join(landingRoot, "styles.v1.css"), "utf8");
-const termsCss = fs.readFileSync(path.join(landingRoot, "terms.v1.css"), "utf8");
-const javascript = fs.readFileSync(path.join(landingRoot, "app.v1.js"), "utf8");
+const legalCss = fs.readFileSync(path.join(landingRoot, "terms.v1.css"), "utf8");
+const javascript = fs.readFileSync(path.join(landingRoot, "app.v2.js"), "utf8");
 
 describe("Shavette static landing", () => {
   it("does not load the Flutter runtime", () => {
     assert.doesNotMatch(html, /flutter_bootstrap|main\.dart\.js|canvaskit/i);
-    assert.match(html, /\/shavette\/app\.v1\.js/);
+    assert.match(html, /\/shavette\/app\.v2\.js/);
     assert.match(html, /\/shavette\/styles\.v1\.css/);
   });
 
@@ -48,13 +52,16 @@ describe("Shavette static landing", () => {
     ]) {
       assert.match(javascript, new RegExp(parameter));
     }
+
+    assert.match(html, /href="\/shavette\/privacy"/);
+    assert.match(javascript, /PRIVACY_VERSION = '2026-10-07'/);
   });
 
-  it("stays below a 120 KB source payload", () => {
+  it("stays below a 140 KB source payload", () => {
     const files = [
       path.join(landingRoot, "index.html"),
       path.join(landingRoot, "styles.v1.css"),
-      path.join(landingRoot, "app.v1.js"),
+      path.join(landingRoot, "app.v2.js"),
       path.join(projectRoot, "assets", "images", "shavette", "shavette_agenda.jpg"),
       path.join(projectRoot, "assets", "images", "shavette", "shavette_icon.jpg"),
     ];
@@ -63,7 +70,7 @@ describe("Shavette static landing", () => {
       0,
     );
 
-    assert.ok(totalBytes < 120_000, `Landing payload is ${totalBytes} bytes`);
+    assert.ok(totalBytes < 140_000, `Landing payload is ${totalBytes} bytes`);
   });
 
   it("uses the dedicated Hosting rewrite and restrictive CSP", () => {
@@ -110,9 +117,42 @@ describe("Shavette static landing", () => {
     assert.match(termsHtml, /\/shavette\/terms\.v1\.css/);
     assert.doesNotMatch(termsHtml, /<script\b/i);
     assert.doesNotMatch(termsHtml, /<style\b/i);
-    assert.ok(termsCss.length > 0);
+    assert.ok(legalCss.length > 0);
     assert.ok(
       termsHeaders.headers.some(
+        (header) =>
+          header.key === "Content-Security-Policy" &&
+          header.value.includes("script-src 'none'") &&
+          header.value.includes("frame-ancestors 'none'"),
+      ),
+    );
+  });
+
+  it("publishes a comprehensive Shavette privacy page at the clean legal URL", () => {
+    const firebaseConfig = JSON.parse(
+      fs.readFileSync(path.join(repositoryRoot, "firebase.json"), "utf8"),
+    );
+    const rewrite = firebaseConfig.hosting.rewrites.find(
+      (entry) => entry.source === "/shavette/privacy",
+    );
+    const privacyHeaders = firebaseConfig.hosting.headers.find(
+      (entry) => entry.source === "/shavette/privacy",
+    );
+
+    assert.equal(rewrite.destination, "/shavette/privacy/index.html");
+    assert.match(privacyHtml, /Come Shavette tratta i tuoi dati/);
+    assert.match(privacyHtml, /Ultimo aggiornamento: 7 ottobre 2026/);
+    assert.match(privacyHtml, /Firebase Crashlytics/);
+    assert.match(privacyHtml, /Firebase Performance Monitoring/);
+    assert.match(privacyHtml, /RevenueCat/);
+    assert.match(privacyHtml, /Resend/);
+    assert.match(privacyHtml, /Founding Salons/);
+    assert.match(privacyHtml, /href="\/shavette\/terms"/);
+    assert.match(privacyHtml, /\/shavette\/terms\.v1\.css/);
+    assert.doesNotMatch(privacyHtml, /<script\b/i);
+    assert.doesNotMatch(privacyHtml, /<style\b/i);
+    assert.ok(
+      privacyHeaders.headers.some(
         (header) =>
           header.key === "Content-Security-Policy" &&
           header.value.includes("script-src 'none'") &&
