@@ -81,6 +81,35 @@
         ]
       },
       {
+        "source": "/shavette/privacy",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300, s-maxage=300"
+          },
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; connect-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'none'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "DENY"
+          },
+          {
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=(), payment=()"
+          }
+        ]
+      },
+      {
         "source": "/shavette/*.@(css|js)",
         "headers": [
           {
@@ -107,6 +136,10 @@
       {
         "source": "/shavette/terms",
         "destination": "/shavette/terms/index.html"
+      },
+      {
+        "source": "/shavette/privacy",
+        "destination": "/shavette/privacy/index.html"
       },
       {
         "source": "**",

@@ -1,7 +1,11 @@
-name: Deploy Flutter Web to GitHub Pages
+name: Deploy Portfolio
 
 on:
   push:
+    branches:
+      - main
+
+  pull_request:
     branches:
       - main
 
@@ -11,18 +15,18 @@ permissions:
   contents: write
 
 concurrency:
-  group: portfolio-production
+  group: portfolio-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Test static Shavette landing
+      - name: Test static Shavette pages
         working-directory: ./portfolioflutterweb
         run: node --test test/shavette_static_test.js
 
@@ -40,13 +44,24 @@ jobs:
         working-directory: ./portfolioflutterweb
         run: flutter build web --release --base-href "/"
 
-      - name: Configure SPA fallback
+      - name: Configure GitHub Pages SPA fallback
+        if: github.event_name != 'pull_request'
         working-directory: ./portfolioflutterweb
         run: cp build/web/index.html build/web/404.html
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy GitHub Pages fallback
+        if: github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./portfolioflutterweb/build/web
           force_orphan: true
+
+      - name: Deploy Firebase Hosting production
+        if: github.event_name != 'pull_request'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_15_V1 }}
+          projectId: portfolio-15-v1
+          channelId: live
