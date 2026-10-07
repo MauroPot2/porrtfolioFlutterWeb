@@ -5,13 +5,17 @@ on:
     branches:
       - main
 
+  pull_request:
+    branches:
+      - main
+
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: portfolio-production
+  group: portfolio-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -41,10 +45,12 @@ jobs:
         run: flutter build web --release --base-href "/"
 
       - name: Configure GitHub Pages SPA fallback
+        if: github.event_name != 'pull_request'
         working-directory: ./portfolioflutterweb
         run: cp build/web/index.html build/web/404.html
 
       - name: Deploy GitHub Pages fallback
+        if: github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -52,6 +58,7 @@ jobs:
           force_orphan: true
 
       - name: Deploy Firebase Hosting production
+        if: github.event_name != 'pull_request'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
