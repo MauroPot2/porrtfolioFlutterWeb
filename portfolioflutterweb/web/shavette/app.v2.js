@@ -49,6 +49,18 @@
     });
   }
 
+  function reportGoogleAdsConversion() {
+    if (typeof window.gtag !== 'function') {
+      return;
+    }
+
+    window.gtag('event', 'conversion', {
+      send_to: 'AW-18503833834/pvJxCLWxhpcdEOqxqPdE',
+      value: 1.0,
+      currency: 'EUR',
+    });
+  }
+
   function payloadFromForm() {
     const data = new FormData(form);
 
@@ -161,6 +173,7 @@
 
     try {
       await submitApplication(payload);
+      reportGoogleAdsConversion();
       form.hidden = true;
       successMessage.hidden = false;
       successMessage.focus({ preventScroll: true });
