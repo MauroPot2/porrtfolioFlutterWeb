@@ -141,7 +141,7 @@ describe("Shavette static landing", () => {
 
     assert.equal(rewrite.destination, "/shavette/privacy/index.html");
     assert.match(privacyHtml, /Come Shavette tratta i tuoi dati/);
-    assert.match(privacyHtml, /Ultimo aggiornamento: 7 ottobre 2026/);
+    assert.match(privacyHtml, /Ultimo aggiornamento: 13 ottobre 2026/);
     assert.match(privacyHtml, /Firebase Crashlytics/);
     assert.match(privacyHtml, /Firebase Performance Monitoring/);
     assert.match(privacyHtml, /RevenueCat/);
