@@ -18,12 +18,16 @@ const privacyHtml = fs.readFileSync(
 );
 const css = fs.readFileSync(path.join(landingRoot, "styles.v1.css"), "utf8");
 const legalCss = fs.readFileSync(path.join(landingRoot, "terms.v1.css"), "utf8");
-const javascript = fs.readFileSync(path.join(landingRoot, "app.v2.js"), "utf8");
+const javascript = fs.readFileSync(path.join(landingRoot, "app.v3.js"), "utf8");
+const consentJavascript = fs.readFileSync(
+  path.join(landingRoot, "consent.v1.js"),
+  "utf8",
+);
 
 describe("Shavette static landing", () => {
   it("does not load the Flutter runtime", () => {
     assert.doesNotMatch(html, /flutter_bootstrap|main\.dart\.js|canvaskit/i);
-    assert.match(html, /\/shavette\/app\.v2\.js/);
+    assert.match(html, /\/shavette\/app\.v3\.js/);
     assert.match(html, /\/shavette\/styles\.v1\.css/);
   });
 
@@ -54,14 +58,14 @@ describe("Shavette static landing", () => {
     }
 
     assert.match(html, /href="\/shavette\/privacy"/);
-    assert.match(javascript, /PRIVACY_VERSION = '2026-10-07'/);
+    assert.match(javascript, /PRIVACY_VERSION = '2026-11-03'/);
   });
 
   it("stays below a 140 KB source payload", () => {
     const files = [
       path.join(landingRoot, "index.html"),
       path.join(landingRoot, "styles.v1.css"),
-      path.join(landingRoot, "app.v2.js"),
+      path.join(landingRoot, "app.v3.js"),
       path.join(projectRoot, "assets", "images", "shavette", "shavette_agenda.jpg"),
       path.join(projectRoot, "assets", "images", "shavette", "shavette_icon.jpg"),
     ];
@@ -89,6 +93,7 @@ describe("Shavette static landing", () => {
       landingHeaders.headers.some(
         (header) =>
           header.key === "Content-Security-Policy" &&
+          header.value.includes("script-src 'self' https://www.googletagmanager.com") &&
           header.value.includes("frame-ancestors 'none'"),
       ),
     );
@@ -98,6 +103,30 @@ describe("Shavette static landing", () => {
     assert.doesNotMatch(html, /<script(?![^>]*\bsrc=)[^>]*>/i);
     assert.doesNotMatch(html, /<style\b/i);
     assert.ok(css.length > 0);
+  });
+
+  it("loads Google Ads measurement consistently and converts only successful applications", () => {
+    for (const page of [html, termsHtml, privacyHtml]) {
+      assert.match(
+        page,
+        /googletagmanager\.com\/gtag\/js\?id=AW-18503833834/,
+      );
+      assert.match(page, /\/shavette\/consent\.v1\.js/);
+      assert.match(page, /\/shavette\/consent\.v1\.css/);
+      assert.doesNotMatch(page, /<script(?![^>]*\bsrc=)[^>]*>/i);
+    }
+
+    assert.match(consentJavascript, /gtag\('config', 'AW-18503833834'\)/);
+    assert.match(
+      javascript,
+      /send_to: 'AW-18503833834\/pvJxCLWxhpcdEOqxqPdE'/,
+    );
+    assert.match(javascript, /value: 1\.0/);
+    assert.match(javascript, /currency: 'EUR'/);
+    assert.match(
+      javascript,
+      /await submitApplication\(payload\);\s*reportGoogleAdsConversion\(\);/,
+    );
   });
 
   it("publishes the Shavette terms page at the clean legal URL", () => {
@@ -115,14 +144,13 @@ describe("Shavette static landing", () => {
     assert.match(termsHtml, /Termini di utilizzo di Shavette/);
     assert.match(termsHtml, /Ultimo aggiornamento: 5 settembre 2026/);
     assert.match(termsHtml, /\/shavette\/terms\.v1\.css/);
-    assert.doesNotMatch(termsHtml, /<script\b/i);
     assert.doesNotMatch(termsHtml, /<style\b/i);
     assert.ok(legalCss.length > 0);
     assert.ok(
       termsHeaders.headers.some(
         (header) =>
           header.key === "Content-Security-Policy" &&
-          header.value.includes("script-src 'none'") &&
+          header.value.includes("script-src 'self' https://www.googletagmanager.com") &&
           header.value.includes("frame-ancestors 'none'"),
       ),
     );
@@ -141,21 +169,21 @@ describe("Shavette static landing", () => {
 
     assert.equal(rewrite.destination, "/shavette/privacy/index.html");
     assert.match(privacyHtml, /Come Shavette tratta i tuoi dati/);
-    assert.match(privacyHtml, /Ultimo aggiornamento: 13 ottobre 2026/);
+    assert.match(privacyHtml, /Ultimo aggiornamento: 3 novembre 2026/);
     assert.match(privacyHtml, /Firebase Crashlytics/);
     assert.match(privacyHtml, /Firebase Performance Monitoring/);
     assert.match(privacyHtml, /RevenueCat/);
     assert.match(privacyHtml, /Resend/);
+    assert.match(privacyHtml, /Google Ads e Consent Mode/);
     assert.match(privacyHtml, /Founding Salons/);
     assert.match(privacyHtml, /href="\/shavette\/terms"/);
     assert.match(privacyHtml, /\/shavette\/terms\.v1\.css/);
-    assert.doesNotMatch(privacyHtml, /<script\b/i);
     assert.doesNotMatch(privacyHtml, /<style\b/i);
     assert.ok(
       privacyHeaders.headers.some(
         (header) =>
           header.key === "Content-Security-Policy" &&
-          header.value.includes("script-src 'none'") &&
+          header.value.includes("script-src 'self' https://www.googletagmanager.com") &&
           header.value.includes("frame-ancestors 'none'"),
       ),
     );
