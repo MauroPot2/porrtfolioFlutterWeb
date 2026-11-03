@@ -61,6 +61,13 @@ describe("Shavette static landing", () => {
     assert.match(javascript, /PRIVACY_VERSION = '2026-11-03'/);
   });
 
+  it("publishes the current Founding Salons promotion", () => {
+    assert.match(html, /gratis per 3 mesi/i);
+    assert.match(html, /3 mesi pieni dalla data di attivazione/i);
+    assert.match(html, /prezzo Founder riservato per i 12 mesi successivi/i);
+    assert.doesNotMatch(html, /gratis fino al 31 dicembre 2026/i);
+  });
+
   it("stays below a 140 KB source payload", () => {
     const files = [
       path.join(landingRoot, "index.html"),
@@ -142,7 +149,10 @@ describe("Shavette static landing", () => {
 
     assert.equal(rewrite.destination, "/shavette/terms/index.html");
     assert.match(termsHtml, /Termini di utilizzo di Shavette/);
-    assert.match(termsHtml, /Ultimo aggiornamento: 5 settembre 2026/);
+    assert.match(termsHtml, /Ultimo aggiornamento: 3 novembre 2026/);
+    assert.match(termsHtml, /gratuitamente per 3 mesi calcolati dalla data di attivazione/i);
+    assert.match(termsHtml, /prezzo Founder riservato per i 12 mesi successivi/i);
+    assert.match(termsHtml, /non viene attivato automaticamente alcun abbonamento a pagamento/i);
     assert.match(termsHtml, /\/shavette\/terms\.v1\.css/);
     assert.doesNotMatch(termsHtml, /<style\b/i);
     assert.ok(legalCss.length > 0);
