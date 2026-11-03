@@ -19,7 +19,11 @@
   <link rel="icon" type="image/jpeg" href="/assets/assets/images/shavette/shavette_icon.jpg">
   <link rel="stylesheet" href="/shavette/styles.v1.css">
   <link rel="stylesheet" href="/shavette/terms.v1.css">
+  <link rel="stylesheet" href="/shavette/consent.v1.css">
   <title>Privacy Policy | Shavette</title>
+
+  <script src="/shavette/consent.v1.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18503833834"></script>
 </head>
 <body>
   <a class="skip-link" href="#contenuto">Vai all'informativa privacy</a>
@@ -43,7 +47,7 @@
         <p class="eyebrow">INFORMATIVA SULLA PRIVACY</p>
         <h1>Come Shavette tratta i tuoi dati</h1>
         <p class="legal-lead">Questa informativa descrive in modo trasparente i dati trattati dall'app Shavette, dal sito e dai servizi collegati, le finalità del trattamento, i fornitori coinvolti e i diritti degli utenti.</p>
-        <p class="legal-updated">Ultimo aggiornamento: 13 ottobre 2026 · Versione 2026-10-13</p>
+        <p class="legal-updated">Ultimo aggiornamento: 3 novembre 2026 · Versione 2026-11-03</p>
       </div>
     </section>
 
@@ -159,6 +163,9 @@
 
             <h3>Resend</h3>
             <p>Resend viene utilizzato per alcune email transazionali, tra cui inviti allo staff, verifiche e comunicazioni operative. A Resend possono essere trasmessi l'indirizzo email del destinatario e il contenuto strettamente necessario della comunicazione. Informazioni: <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy di Resend</a>.</p>
+
+            <h3>Google Ads e Consent Mode</h3>
+            <p>La pagina pubblica Shavette utilizza il Google tag per misurare l'efficacia delle campagne e registrare una conversione quando una candidatura Founding Salons viene confermata dal servizio. Il tag è configurato con Google Consent Mode: per impostazione predefinita ad_storage, analytics_storage, ad_user_data e ad_personalization sono impostati su denied; l'utente può accettare o rifiutare dal banner privacy. In base alla scelta possono essere trattati dati tecnici, informazioni di interazione e dati di attribuzione della campagna necessari alla misurazione. Shavette non utilizza questi dati per creare propri profili pubblicitari comportamentali.</p>
           </section>
 
           <section id="trasferimenti">
@@ -225,7 +232,7 @@
             <h2>14. Sito, pagina Shavette e modulo Founding Salons</h2>
             <p>La pagina pubblica Shavette su mauropot.com è ospitata tramite Firebase Hosting. Il servizio di hosting può trattare indirizzi IP e dati tecnici delle richieste per erogare il sito, proteggere l'infrastruttura e prevenire abusi.</p>
             <p>Il modulo Founding Salons può raccogliere nome del salone, città, numero di barbieri, nome e cognome del referente, email, telefono/WhatsApp, eventuale profilo Instagram, metodo attuale di gestione prenotazioni, parametri UTM e percorso della pagina. L'indirizzo IP viene utilizzato in forma derivata e temporanea per limitare abusi e non viene salvato nella candidatura dal codice applicativo.</p>
-            <p>Al momento la pagina Shavette non utilizza cookie pubblicitari né strumenti di profilazione comportamentale. I parametri UTM, se presenti nell'URL, vengono associati alla candidatura per comprendere la provenienza della campagna.</p>
+            <p>La pagina Shavette utilizza Google Ads per misurare le campagne e le conversioni del modulo Founding Salons. Il Google tag è configurato con Consent Mode e, per impostazione predefinita, ad_storage, analytics_storage, ad_user_data e ad_personalization sono impostati su denied. La preferenza espressa nel banner viene memorizzata localmente nel browser per applicarla alle visite successive. Se l'utente accetta, Google può utilizzare le tecnologie consentite per misurazione e attribuzione; se rifiuta, il sito mantiene le impostazioni negate. I parametri UTM, se presenti nell'URL, vengono associati alla candidatura per comprendere la provenienza della campagna.</p>
           </section>
 
           <section id="modifiche">
@@ -258,5 +265,19 @@
       </nav>
     </div>
   </footer>
+
+  <aside class="consent-banner" id="consent-banner" role="dialog" aria-live="polite" aria-label="Preferenze privacy" hidden>
+    <div class="consent-inner">
+      <div class="consent-icon" aria-hidden="true">i</div>
+      <div class="consent-copy">
+        <p>Usiamo tecnologie Google per misurare le campagne pubblicitarie. Puoi accettare o rifiutare la memorizzazione dei dati per annunci e misurazione.</p>
+        <a href="/shavette/privacy">Leggi l’informativa privacy</a>
+      </div>
+      <div class="consent-actions">
+        <button class="consent-button consent-button-secondary" id="consent-reject" type="button">Rifiuta</button>
+        <button class="consent-button consent-button-primary" id="consent-accept" type="button">Accetta</button>
+      </div>
+    </div>
+  </aside>
 </body>
 </html>
