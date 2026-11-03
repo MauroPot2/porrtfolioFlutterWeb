@@ -19,7 +19,11 @@
   <link rel="icon" type="image/jpeg" href="/assets/assets/images/shavette/shavette_icon.jpg">
   <link rel="stylesheet" href="/shavette/styles.v1.css">
   <link rel="stylesheet" href="/shavette/terms.v1.css">
+  <link rel="stylesheet" href="/shavette/consent.v1.css">
   <title>Termini di utilizzo | Shavette</title>
+
+  <script src="/shavette/consent.v1.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18503833834"></script>
 </head>
 <body>
   <a class="skip-link" href="#contenuto">Vai ai termini</a>
@@ -177,5 +181,19 @@
       </nav>
     </div>
   </footer>
+
+  <aside class="consent-banner" id="consent-banner" role="dialog" aria-live="polite" aria-label="Preferenze privacy" hidden>
+    <div class="consent-inner">
+      <div class="consent-icon" aria-hidden="true">i</div>
+      <div class="consent-copy">
+        <p>Usiamo tecnologie Google per misurare le campagne pubblicitarie. Puoi accettare o rifiutare la memorizzazione dei dati per annunci e misurazione.</p>
+        <a href="/shavette/privacy">Leggi l’informativa privacy</a>
+      </div>
+      <div class="consent-actions">
+        <button class="consent-button consent-button-secondary" id="consent-reject" type="button">Rifiuta</button>
+        <button class="consent-button consent-button-primary" id="consent-accept" type="button">Accetta</button>
+      </div>
+    </div>
+  </aside>
 </body>
 </html>
